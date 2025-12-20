@@ -11,7 +11,9 @@ public class Pedido {
     private Long id;
     private String nomeProduto;
     private String codigoRastreio;
+
     @Enumerated(EnumType.STRING)
+    @Column(length = 30)
     private StatusPedido status;
     private LocalDateTime dataUltimaAtualizacao;
 
@@ -36,9 +38,15 @@ public class Pedido {
         return codigoRastreio;
     }
 
+    public void atualizarStatus(StatusPedido novoStatus) {
+        this.status = novoStatus;
+        this.dataUltimaAtualizacao = LocalDateTime.now();
+    }
+
     public StatusPedido getStatus() {
         return status;
     }
+
     public LocalDateTime getDataUltimaAtualizacao() {
         return dataUltimaAtualizacao;
     }

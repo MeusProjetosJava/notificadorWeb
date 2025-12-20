@@ -1,7 +1,9 @@
 package app.notificadorweb.controller;
 
 import app.notificadorweb.domain.Pedido;
+import app.notificadorweb.domain.StatusPedido;
 import app.notificadorweb.dto.PedidoRequestDto;
+import app.notificadorweb.dto.PedidoStatusRequestDto;
 import org.springframework.web.bind.annotation.*;
 import app.notificadorweb.service.PedidoService;
 
@@ -20,6 +22,12 @@ public class PedidoController {
         return pedidoService.criarPedido(pedidoRequestDto.getProdutoId(),
                 pedidoRequestDto.getNomeCliente(),
                 pedidoRequestDto.getTelefoneCliente());
+    }
+
+    @PatchMapping("/{id}/status")
+    public Pedido atualizarStatus(@PathVariable Long id,
+                                  @RequestBody PedidoStatusRequestDto  pedidoStatusRequestDto) {
+        return pedidoService.atualizarStatus(id, pedidoStatusRequestDto.getStatus());
     }
 
 

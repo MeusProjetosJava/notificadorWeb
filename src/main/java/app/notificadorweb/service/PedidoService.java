@@ -1,8 +1,12 @@
 package app.notificadorweb.service;
 
 import app.notificadorweb.domain.Pedido;
+import app.notificadorweb.domain.StatusPedido;
 import org.springframework.stereotype.Service;
 import app.notificadorweb.repository.PedidoRepository;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import java.util.Optional;
 
 @Service
 public class PedidoService {
@@ -22,6 +26,28 @@ public class PedidoService {
         Pedido pedido = new Pedido(nomeProduto, codigoRastreio);
 
         Pedido pedidoSalvo = pedidoRepository.save(pedido);
+
+        return pedidoSalvo;
+    }
+
+    public Pedido atualizarStatus(Long pedidoId, String novoStatus){
+        Pedido pedido = pedidoRepository.findById(pedidoId).orElseThrow(() ->
+                new RuntimeException("Pedido não encontrado"));
+
+        StatusPedido statusConvertido;
+
+        try {
+            statusConvertido = StatusPedido.valueOf(novoStatus);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Status inválido" + novoStatus);
+        }
+
+        pedido.atualizarStatus(statusConvertido);
+
+        Pedido pedidoSalvo = pedidoRepository.save(pedido);
+
+        System.out.println("WhatsApp enviado: Pedido " + pedido.getId()
+                + " agora está com status " + pedido.getStatus());
 
         return pedidoSalvo;
     }
