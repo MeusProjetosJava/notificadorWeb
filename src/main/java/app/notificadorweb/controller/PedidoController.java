@@ -7,6 +7,8 @@ import app.notificadorweb.dto.PedidoStatusRequestDto;
 import org.springframework.web.bind.annotation.*;
 import app.notificadorweb.service.PedidoService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/pedidos")
 public class PedidoController {
@@ -15,6 +17,16 @@ public class PedidoController {
 
     public PedidoController(PedidoService pedidoService) {
         this.pedidoService = pedidoService;
+    }
+
+    @GetMapping("/listar")
+    public List<Pedido>listarPedidos(){
+        return pedidoService.listarPedidos();
+    }
+
+    @GetMapping("/{id}")
+    public Pedido buscarPedido(@PathVariable Long id){
+        return pedidoService.buscarPedidoPorId(id);
     }
 
     @PostMapping

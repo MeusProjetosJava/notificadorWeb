@@ -7,6 +7,9 @@ import app.notificadorweb.exception.StatusPedidoInvalidoException;
 import org.springframework.stereotype.Service;
 import app.notificadorweb.repository.PedidoRepository;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class PedidoService {
 
@@ -20,6 +23,16 @@ public class PedidoService {
         this.whatsappService = whatsappService;
 
     }
+
+    public List<Pedido> listarPedidos(){
+        return pedidoRepository.findAll();
+    }
+
+    public Pedido buscarPedidoPorId(Long id) {
+        return pedidoRepository.findById(id)
+                .orElseThrow(() -> new PedidoNaoEncontradoException(id));
+    }
+
 
 
     public Pedido criarPedido(Long produtoId, String nomeCliente, String telefoneCliente) {
