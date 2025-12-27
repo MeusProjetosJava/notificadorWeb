@@ -8,19 +8,18 @@ import org.springframework.stereotype.Service;
 import app.notificadorweb.repository.PedidoRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PedidoService {
 
     private final PedidoRepository pedidoRepository;
 
-    private WhatsAppService whatsappService;
+    private final SmsService smsService;
 
 
-    public PedidoService(PedidoRepository pedidoRepository, WhatsAppService whatsappService) {
+    public PedidoService(PedidoRepository pedidoRepository, SmsService smsService) {
         this.pedidoRepository = pedidoRepository;
-        this.whatsappService = whatsappService;
+        this.smsService = smsService;
 
     }
 
@@ -48,11 +47,11 @@ public class PedidoService {
     }
 
     public Pedido atualizarStatus(Long pedidoId, String novoStatus) {
-        Pedido pedido = pedidoRepository.findById(pedidoId).orElseThrow(() ->
-                new PedidoNaoEncontradoException(pedidoId));
+
+        Pedido pedido = pedidoRepository.findById(pedidoId)
+                .orElseThrow(() -> new PedidoNaoEncontradoException(pedidoId));
 
         StatusPedido statusConvertido;
-
         try {
             statusConvertido = StatusPedido.valueOf(novoStatus);
         } catch (IllegalArgumentException e) {
@@ -60,13 +59,20 @@ public class PedidoService {
         }
 
         pedido.atualizarStatus(statusConvertido);
-
         Pedido pedidoSalvo = pedidoRepository.save(pedido);
 
-        whatsappService.enviarMensagem("Vitor", "85900001111", pedidoSalvo.getId(), pedidoSalvo.getStatus());
+        smsService.enviarSms(
+                "Vitor",
+                "+5585999580201",
+                pedidoSalvo.getId(),
+                pedidoSalvo.getStatus()
+        );
 
         return pedidoSalvo;
     }
+
+
+
 
 
     private String resolverNomeProduto(Long produtoId) {
