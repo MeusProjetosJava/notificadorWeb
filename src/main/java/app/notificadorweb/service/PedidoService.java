@@ -4,6 +4,7 @@ import app.notificadorweb.domain.Pedido;
 import app.notificadorweb.domain.StatusPedido;
 import app.notificadorweb.exception.PedidoNaoEncontradoException;
 import app.notificadorweb.exception.StatusPedidoInvalidoException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import app.notificadorweb.repository.PedidoRepository;
 
@@ -15,6 +16,9 @@ public class PedidoService {
     private final PedidoRepository pedidoRepository;
 
     private final SmsService smsService;
+
+    @Value("${app.sms.destino}")
+    private String telefoneDestino;
 
 
     public PedidoService(PedidoRepository pedidoRepository, SmsService smsService) {
@@ -62,8 +66,7 @@ public class PedidoService {
         Pedido pedidoSalvo = pedidoRepository.save(pedido);
 
         smsService.enviarSms(
-                "Vitor",
-                "+5585999580201",
+                "Vitor", telefoneDestino,
                 pedidoSalvo.getId(), pedidoSalvo.getNomeProduto(),
                 pedidoSalvo.getStatus()
         );
