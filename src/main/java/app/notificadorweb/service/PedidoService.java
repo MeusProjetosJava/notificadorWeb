@@ -90,13 +90,13 @@ public class PedidoService {
 
     private String resolverNomeProduto(Long produtoId) {
         if (produtoId == 1L) {
-            return "Moto G";
+            return "iPHONE";
         }
         if (produtoId == 2L) {
-            return "Samsung Galaxi";
+            return "MacBook";
         }
         if (produtoId == 3L) {
-            return "Redmi Note 15";
+            return "Moto G";
         }
 
         return "Produto desconhecido";
