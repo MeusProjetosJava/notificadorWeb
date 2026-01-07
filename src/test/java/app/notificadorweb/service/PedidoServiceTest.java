@@ -37,12 +37,12 @@ class PedidoServiceTest {
         Pedido pedido1 = new Pedido("Mackbook pró", "xr3");
         Pedido pedido2 = new Pedido("Mackbook air", "xr4");
 
-        when(pedidoRepository.findAll()).thenReturn(List.of(pedido1, pedido2));
+        when(pedidoRepository.findByAtivoTrue()).thenReturn(List.of(pedido1, pedido2));
 
         List<Pedido> pedidos = pedidoService.listarPedidos();
 
         assertEquals(2, pedidos.size());
-        verify(pedidoRepository).findAll();
+        verify(pedidoRepository).findByAtivoTrue();
     }
 
     @DisplayName("Dado um pedido, quando chamar por id o pedido, então deve retornar o pedido")

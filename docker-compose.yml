@@ -1,0 +1,41 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-notificador
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: notificador
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./mysql/init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    image: notificador-back
+    container_name: notificador-back
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      # BANCO (VARIÁVEIS ESPECÍFICAS PARA DOCKER)
+      DB_URL: ${DB_URL_DOCKER}
+      DB_USERNAME: ${DB_USERNAME_DOCKER}
+      DB_PASSWORD: ${DB_PASSWORD_DOCKER}
+
+      # TWILIO (HERDADO DO WINDOWS)
+      TWILIO_ACCOUNT_SID: ${TWILIO_ACCOUNT_SID}
+      TWILIO_AUTH_TOKEN: ${TWILIO_AUTH_TOKEN}
+      TWILIO_SMS_FROM: ${TWILIO_SMS_FROM}
+
+      # APP
+      SMS_DESTINO: ${SMS_DESTINO}
+
+volumes:
+  mysql_data:
