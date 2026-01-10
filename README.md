@@ -31,6 +31,14 @@ O objetivo deste projeto é demonstrar:
 
 ---
 
+## CI/CD
+
+- Pipeline de CI com GitHub Actions
+- Build automático com Maven
+- Execução de testes unitários (JUnit / Mockito)
+- Build automático da imagem Docker
+
+
 ## 🧱 Arquitetura
 
 - **Backend**: Spring Boot (container Docker)
