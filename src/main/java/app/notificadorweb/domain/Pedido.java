@@ -1,5 +1,5 @@
 package app.notificadorweb.domain;
-
+import com.fasterxml.jackson.annotation.JsonFormat;
 import app.notificadorweb.exception.PedidoNaoPodeSerAtualizadoException;
 import app.notificadorweb.exception.PedidoNaoPodeSerDeletadoException;
 import jakarta.persistence.*;
@@ -15,13 +15,14 @@ public class Pedido {
     private String codigoRastreio;
 
     private boolean ativo;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime dataExclusao;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 30)
     private StatusPedido status;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime dataUltimaAtualizacao;
-
     protected Pedido(){}
 
     public Pedido(String nomeProduto, String codigoRastreio) {
